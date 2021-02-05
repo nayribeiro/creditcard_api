@@ -13,3 +13,4 @@ class Card(db.Model):
     holder = db.Column(db.String())
     number = db.Column(db.Integer, primary_key=True)
     cvv = db.Column(db.Integer())
+    brand = db.Column(db.String())

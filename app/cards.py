@@ -4,6 +4,7 @@ from .serializers import CardSchema
 from marshmallow.exceptions import ValidationError
 from app.creditcard import CreditCard
 from .utils import format_date
+from app.creditcard.exceptions import BrandNotFound
 
 
 bp_cards = Blueprint('cards', __name__)
@@ -32,6 +33,12 @@ def register():
     card.cvv = card_data["cvv"]
     card.holder = card_data["holder"]
     card.exp_date = exp_date
+    try:
+        card.brand = cc.get_brand()
+    except BrandNotFound:
+        return {
+            "message": "Card brand not found"
+        }
 
     current_app.db.session.add(card)
     current_app.db.session.commit()

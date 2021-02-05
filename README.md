@@ -31,6 +31,14 @@ flask db migrate
 flask db upgrade
 ```
 
+## Endpoints
+
+```
+POST - /register - Cadastra cartão
+GET - /show - Mostra cartões cadastrados
+```
+
+
 ## Documentação:
 
 https://flask.palletsprojects.com/en/1.1.x/

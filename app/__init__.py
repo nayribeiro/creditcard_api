@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_migrate import Migrate
+from flask_migrate import Migrate, migrate
 from .model import configure as config_db
 
 
@@ -9,10 +9,13 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///creditcard.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    config_db(app)
-    # config_ma(app)
+    from app.model import Card
 
-    Migrate(app, app.db)
+    config_db(app)
+    # migrate =  Migrate(app, app.db)
+    migrate = Migrate()
+
+    migrate.init_app(app, app.db)
 
     from .cards import bp_cards
     app.register_blueprint(bp_cards)

@@ -3,6 +3,8 @@ from .model import Card
 from .serializers import CardSchema
 from marshmallow.exceptions import ValidationError
 from app.creditcard import CreditCard
+from .utils import format_date
+
 
 bp_cards = Blueprint('cards', __name__)
 
@@ -23,16 +25,20 @@ def register():
     if not cc.is_valid():
         return "Número de cartão de crédito inválido"
 
+    exp_date = format_date(card_data["exp_date"])
+
     card = Card()
     card.number = card_data["number"]
     card.cvv = card_data["cvv"]
     card.holder = card_data["holder"]
-    card.exp_date = card_data["exp_date"]
+    card.exp_date = exp_date
 
     current_app.db.session.add(card)
     current_app.db.session.commit()
 
-    return card_data
+    return {
+        "message": "Card saved"
+    }
 
 
 @bp_cards.route('/show', methods=['GET'])
